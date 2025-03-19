@@ -32,7 +32,7 @@
         <!-- Display similarity score if available -->
         <div class="response" th:if="${response}">
             <h3>Similarity Score:</h3>
-            <p th:text="${response}"></p>
+            <p th:text="${response} + '%'"></p>
         </div>
     </div>
 </body>

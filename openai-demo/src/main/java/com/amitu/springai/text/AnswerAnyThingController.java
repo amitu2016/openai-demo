@@ -26,7 +26,7 @@ public class AnswerAnyThingController {
     	ChatResponse response = service.generateAnswer(question);
     	System.out.println(response);
     	model.addAttribute("question",question);
-    	model.addAttribute("answer", response.getResult().getOutput().getText());
+    	model.addAttribute("answer", response.getResult().getOutput().getContent());
         return "askAnything";
     }
 }

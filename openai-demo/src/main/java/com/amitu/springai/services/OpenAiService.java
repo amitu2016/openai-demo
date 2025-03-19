@@ -9,7 +9,10 @@ import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,10 @@ public class OpenAiService {
 	
 	@Autowired
 	private EmbeddingModel embeddingModel;
+	
+	@Autowired
+	private VectorStore vectorStore;
+	
 	
 	public OpenAiService(ChatClient.Builder builder) {
 		this.chatClient = builder.defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory())).build();
@@ -42,7 +49,7 @@ public class OpenAiService {
 		
 		Prompt prompt = promptTemplate.create(Map.of("city",city,"month",month,"language",language,"budget",budget));
 		
-		return chatClient.prompt(prompt).call().chatResponse().getResult().getOutput().getText();
+		return chatClient.prompt(prompt).call().chatResponse().getResult().getOutput().getContent();
 	}
 
 	public CountryCuisines getCuisines(String country, String numCuisines, String language) {
@@ -68,7 +75,7 @@ public class OpenAiService {
 				+ "3. Additional tips specific to {company} for interview preparation");
 		
 		Prompt prompt = promptTemplate.create(Map.of("company",company,"jobTitle",jobTitle,"strength",strength,"weakness",weakness));
-		return chatClient.prompt(prompt).call().chatResponse().getResult().getOutput().getText();
+		return chatClient.prompt(prompt).call().chatResponse().getResult().getOutput().getContent();
 	}
 	
 	public float[] embed(String text) {
@@ -100,6 +107,14 @@ public class OpenAiService {
 
 		// Calculate and return cosine similarity
 		return dotProduct / (Math.sqrt(magnitudeA) * Math.sqrt(magnitudeB));
+	}
+	
+	public List<Document> searchJobs(String query){
+		return vectorStore.similaritySearch(SearchRequest.query(query).withTopK(3));
+	}
+
+	public List<Document> searchTickets(String query) {
+		return vectorStore.similaritySearch(SearchRequest.query(query).withTopK(3));
 	}
 
 	

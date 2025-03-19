@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.amitu.springai.services.OpenAiService;
 
 @Controller
-public class JobSearchHelper {
-
+public class ServiceTicketHelper {
+	
 	@Autowired
 	private OpenAiService service;
 
-	@GetMapping("/showJobSearchHelper")
-	public String showJobSearchHelper() {
-		return "jobSearchHelper";
+	@GetMapping("/showServiceTicketHelper")
+	public String showServiceTicketHelper() {
+		return "supportTicketSearchHelper";
 
 	}
 
-	@PostMapping("/jobSearchHelper")
-	public String jobSearchHelper(@RequestParam String query, Model model) {
-		List<Document> response = service.searchJobs(query);
+	@PostMapping("/supportTicketSearchHelper")
+	public String supportTicketSearchHelper(@RequestParam String query, Model model) {
+		List<Document> response = service.searchTickets(query);
 		model.addAttribute("response", response);
-		return "jobSearchHelper";
+		return "supportTicketSearchHelper";
 
 	}
 

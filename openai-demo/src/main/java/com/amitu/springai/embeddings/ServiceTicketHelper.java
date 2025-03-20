@@ -24,12 +24,12 @@ public class ServiceTicketHelper {
 
 	}
 
-	@PostMapping("/supportTicketSearchHelper")
-	public String supportTicketSearchHelper(@RequestParam String query, Model model) {
-		List<Document> response = service.searchTickets(query);
-		model.addAttribute("response", response);
-		return "supportTicketSearchHelper";
-
-	}
+//	@PostMapping("/supportTicketSearchHelper")
+//	public String supportTicketSearchHelper(@RequestParam String query, Model model) {
+//		List<Document> response = service.searchTickets(query);
+//		model.addAttribute("response", response);
+//		return "supportTicketSearchHelper";
+//
+//	}
 
 }

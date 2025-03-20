@@ -10,21 +10,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.amitu.springai.services.OpenAiService;
 
 @Controller
-public class ProductDataBot {
-
+public class LegalDataBot {
+	
 	@Autowired
 	private OpenAiService service;
 
-	@GetMapping("/showProductDataBot")
-	public String showProductDataBot() {
-		return "productDataBot";
+	@GetMapping("/showLegalDataBot")
+	public String showLegalDataBot() {
+		return "legalDataBot";
 
 	}
 
-	@PostMapping("/productDataBot")
-	public String productDataBot(@RequestParam String query, Model model) {
+	@PostMapping("/legalDataBot")
+	public String legalDataBot(@RequestParam String query, Model model) {
 		model.addAttribute("response", service.answer(query));
-		return "productDataBot";
+		return "legalDataBot";
 
 	}
 

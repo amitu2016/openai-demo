@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -117,6 +118,8 @@ public class OpenAiService {
 		return vectorStore.similaritySearch(SearchRequest.query(query).withTopK(3));
 	}
 
-	
+	public String answer(String query) {
+		return chatClient.prompt(query).advisors(new QuestionAnswerAdvisor(vectorStore)).call().content();
+	}
 
 }

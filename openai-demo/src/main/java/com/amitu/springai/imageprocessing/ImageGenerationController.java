@@ -18,7 +18,6 @@ public class ImageGenerationController {
 	@GetMapping("/showImageGenerator")
 	public String showImageGenerator() {
 		return "imageGenerator";
-
 	}
 
 	@PostMapping("/imageGenerator")

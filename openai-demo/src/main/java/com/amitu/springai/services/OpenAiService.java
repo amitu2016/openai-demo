@@ -19,7 +19,9 @@ import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MimeTypeUtils;
 
 import com.amitu.springai.text.prompttemplate.dtos.CountryCuisines;
 
@@ -43,6 +45,10 @@ public class OpenAiService {
 	}
 	
 	public ChatResponse generateAnswer(String question) {
+		return chatClient.prompt(question).call().chatResponse();
+	}
+	
+	public ChatResponse generateAnswerWithRoles(String question) {
 		return chatClient.prompt(question).call().chatResponse();
 	}
 
@@ -140,6 +146,13 @@ public class OpenAiService {
 				.build()));
 		
 		return response.getResult().getOutput().getUrl();
+	}
+
+	public String explainImage(String prompt, String path) {
+		String explanation = chatClient.prompt()
+				.user(u -> u.text(prompt).media(MimeTypeUtils.IMAGE_JPEG, new FileSystemResource(path))).call()
+				.content();
+		return explanation;
 	}
 
 }

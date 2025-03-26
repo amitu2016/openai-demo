@@ -15,6 +15,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
+import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
 import org.springframework.ai.openai.OpenAiImageModel;
@@ -45,6 +46,9 @@ public class OpenAiService {
 	
 	@Autowired
 	private OpenAiAudioTranscriptionModel openAiAudioTranscriptionModel;
+	
+	@Autowired
+	private OpenAiAudioSpeechModel openAiAudioSpeechModel;
 	
 	
 	public OpenAiService(ChatClient.Builder builder) {
@@ -179,6 +183,8 @@ public class OpenAiService {
 		return output;
 	}
 	
+	public byte[] textToSpeech(String text) {
+		return openAiAudioSpeechModel.call(text);
+	}
 	
-
 }

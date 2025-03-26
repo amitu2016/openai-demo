@@ -3,6 +3,7 @@ package com.amitu.springai.services;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ai.audio.transcription.AudioTranscriptionPrompt;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
@@ -14,8 +15,11 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
+import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
+import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
+import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,9 @@ public class OpenAiService {
 	
 	@Autowired
 	private OpenAiImageModel openAiImageModel;
+	
+	@Autowired
+	private OpenAiAudioTranscriptionModel openAiAudioTranscriptionModel;
 	
 	
 	public OpenAiService(ChatClient.Builder builder) {
@@ -163,6 +170,13 @@ public class OpenAiService {
 						).call()
 				.content();
 		return explanation;
+	}
+	
+	public String speechToText(String path) {
+		OpenAiAudioTranscriptionOptions options = OpenAiAudioTranscriptionOptions.builder().withLanguage("en").withResponseFormat(TranscriptResponseFormat.VTT).build();
+		AudioTranscriptionPrompt transcriptionPrompt = new AudioTranscriptionPrompt(new FileSystemResource(path), options);
+		String output = openAiAudioTranscriptionModel.call(transcriptionPrompt).getResult().getOutput();
+		return output;
 	}
 	
 	

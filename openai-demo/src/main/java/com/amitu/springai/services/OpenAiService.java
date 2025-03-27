@@ -18,6 +18,8 @@ import org.springframework.ai.image.ImageResponse;
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
 import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
@@ -49,6 +51,9 @@ public class OpenAiService {
 	
 	@Autowired
 	private OpenAiAudioSpeechModel openAiAudioSpeechModel;
+	
+	@Autowired
+	private OpenAiChatModel openAiChatModel;
 	
 	
 	public OpenAiService(ChatClient.Builder builder) {
@@ -192,6 +197,15 @@ public class OpenAiService {
 		AudioTranscriptionPrompt transcriptionPrompt = new AudioTranscriptionPrompt(new FileSystemResource(path), options);
 		String output = openAiAudioTranscriptionModel.call(transcriptionPrompt).getResult().getOutput();
 		ChatResponse response = generateAnswer("Generate multiple choice questions from the given text: "+output);
+		return response.getResult().getOutput().getContent();
+	}
+	
+	public String getStockPrice(String company) {
+		
+		Prompt prompt = new Prompt("Get stock symbol and stock price of the company "+company, OpenAiChatOptions
+				.builder().withFunction("stockRetrievalFunction").build());
+		ChatResponse response = openAiChatModel.call(prompt);
+		
 		return response.getResult().getOutput().getContent();
 	}
 	

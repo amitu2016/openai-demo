@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "stock.price.api.key",
+  "type": "java.lang.String",
+  "description": "A description for 'stock.price.api.key'"
+}]}

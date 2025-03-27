@@ -187,4 +187,12 @@ public class OpenAiService {
 		return openAiAudioSpeechModel.call(text);
 	}
 	
+	public String generateMCQ(String path) {
+		OpenAiAudioTranscriptionOptions options = OpenAiAudioTranscriptionOptions.builder().withLanguage("en").build();
+		AudioTranscriptionPrompt transcriptionPrompt = new AudioTranscriptionPrompt(new FileSystemResource(path), options);
+		String output = openAiAudioTranscriptionModel.call(transcriptionPrompt).getResult().getOutput();
+		ChatResponse response = generateAnswer("Generate multiple choice questions from the given text: "+output);
+		return response.getResult().getOutput().getContent();
+	}
+	
 }

@@ -15,5 +15,13 @@ public class Functions {
 	Function<StockRetrievalService.Request, StockRetrievalService.Response> stockRetrievalFunction(WebClient.Builder webClientBuilder) {
 		return new StockRetrievalService(webClientBuilder);
 	}
+	
+	@Bean
+	@Description("Gets the currency exchange rate given a symbol (e.g. INR, EUR)")
+	Function<CurrencyExchangeService.Request, CurrencyExchangeService.Response> currencyExchangeFunction(WebClient.Builder webClientBuilder) {
+		return new CurrencyExchangeService(webClientBuilder);
+	}
+	
+	
 
 }

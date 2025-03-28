@@ -36,6 +36,8 @@ import org.springframework.util.MimeTypeUtils;
 
 import com.amitu.springai.text.prompttemplate.dtos.CountryCuisines;
 
+import reactor.core.publisher.Flux;
+
 @Service
 public class OpenAiService {
 
@@ -222,6 +224,10 @@ public class OpenAiService {
 		Moderation moderation = moderationModel.call(new ModerationPrompt(text)).getResult().getOutput();
 		return moderation.getResults().get(0);
 		
+	}
+
+	public Flux<String> streamAnswer(String message) {
+		return chatClient.prompt(message).stream().content();
 	}
 
 }

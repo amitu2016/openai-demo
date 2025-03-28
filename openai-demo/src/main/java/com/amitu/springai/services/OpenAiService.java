@@ -15,6 +15,9 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
+import org.springframework.ai.moderation.Moderation;
+import org.springframework.ai.moderation.ModerationPrompt;
+import org.springframework.ai.moderation.ModerationResult;
 import org.springframework.ai.openai.OpenAiAudioSpeechModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
@@ -22,6 +25,7 @@ import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.OpenAiImageModel;
 import org.springframework.ai.openai.OpenAiImageOptions;
+import org.springframework.ai.openai.OpenAiModerationModel;
 import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -54,6 +58,9 @@ public class OpenAiService {
 
 	@Autowired
 	private OpenAiChatModel openAiChatModel;
+	
+	@Autowired
+	private OpenAiModerationModel moderationModel;
 
 	public OpenAiService(ChatClient.Builder builder) {
 		this.chatClient = builder.defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory())).build();
@@ -209,6 +216,12 @@ public class OpenAiService {
 		ChatResponse response = openAiChatModel.call(prompt);
 
 		return response.getResult().getOutput().getContent();
+	}
+	
+	public ModerationResult moderate(String text) {
+		Moderation moderation = moderationModel.call(new ModerationPrompt(text)).getResult().getOutput();
+		return moderation.getResults().get(0);
+		
 	}
 
 }
